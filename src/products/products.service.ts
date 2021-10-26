@@ -29,24 +29,24 @@ export class ProductsService {
     return result.map((p) => ({ id: p._id, title: p.title, description: p.description, price: p.price }));
   }
 
-  getSingleProduct(productId: string) {
-    const product = this.findProduct(productId)[0];
-    return { ...product };
+  async getSingleProduct(productId: string) {
+    const product = await this.findProduct(productId);
+    return product;
   }
 
   updateProduct(productId: string, title: string, desc: string, price: number) {
-    const [product, index] = this.findProduct(productId);
-    const updatedProduct = { ...product };
-    if (title) {
-      updatedProduct.title = title;
-    }
-    if (desc) {
-      updatedProduct.description = desc;
-    }
-    if (price) {
-      updatedProduct.price = price;
-    }
-    this.products[index] = updatedProduct;
+    // const [product, index] = this.findProduct(productId);
+    // const updatedProduct = { ...product };
+    // if (title) {
+    //   updatedProduct.title = title;
+    // }
+    // if (desc) {
+    //   updatedProduct.description = desc;
+    // }
+    // if (price) {
+    //   updatedProduct.price = price;
+    // }
+    // this.products[index] = updatedProduct;
   }
 
   deleteProduct(prodId: string) {
@@ -54,12 +54,24 @@ export class ProductsService {
     this.products.splice(index, 1);
   }
 
-  private findProduct(id: string): [Product, number] {
-    const productIndex = this.products.findIndex(prod => prod.id === id);
-    const product = this.products[productIndex];
-    if (!product) {
-      throw new NotFoundException('Could not find product.');
+  // find a single product
+  private async findProduct(id: string): Promise<Product> {
+    let product;
+    try {
+      product = await this.productModel.findById(id);
+
+    } catch (err) {
+      if (!product) {
+        throw new NotFoundException("No Product Found")
+      }
     }
-    return [product, productIndex];
+
+    return {
+      id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price
+    };
+
   }
 }
