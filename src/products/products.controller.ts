@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
+import { Product } from 'dist/products/product.model';
 
 import { ProductsService } from './products.service';
 
@@ -29,8 +30,9 @@ export class ProductsController {
   }
 
   @Get()
-  getAllProducts() {
-    return this.productsService.getProducts();
+  async getAllProducts(): Promise<Product[]> {
+    const products = await this.productsService.getProducts();
+    return products;
   }
 
   @Get(':id')

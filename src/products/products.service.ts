@@ -9,6 +9,7 @@ export class ProductsService {
 
   constructor(@InjectModel('Product') private readonly productModel: Model<Product>) { }
 
+  // create new product
   async insertProduct(title: string, desc: string, price: number): Promise<string> {
 
     const newProduct = new this.productModel({
@@ -21,8 +22,11 @@ export class ProductsService {
     return result._id as string;
   }
 
-  getProducts() {
-    return [...this.products];
+  //get all products data
+  async getProducts(): Promise<Product[]> {
+    const result = await this.productModel.find().exec();
+    // const products = 
+    return result.map((p) => ({ id: p._id, title: p.title, description: p.description, price: p.price }));
   }
 
   getSingleProduct(productId: string) {
