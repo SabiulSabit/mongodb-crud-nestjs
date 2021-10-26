@@ -9,7 +9,7 @@ export class ProductsService {
 
   constructor(@InjectModel('Product') private readonly productModel: Model<Product>) { }
 
-  async insertProduct(title: string, desc: string, price: number) {
+  async insertProduct(title: string, desc: string, price: number): Promise<string> {
 
     const newProduct = new this.productModel({
       title: title,
@@ -18,9 +18,7 @@ export class ProductsService {
     });
     const result = await newProduct.save();
 
-    console.log("Data Saved");
-
-    return "Data Saved"
+    return result._id as string;
   }
 
   getProducts() {
