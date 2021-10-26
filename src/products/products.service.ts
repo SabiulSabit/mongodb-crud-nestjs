@@ -23,30 +23,34 @@ export class ProductsService {
   }
 
   //get all products data
-  async getProducts(): Promise<Product[]> {
+  async getProducts() {
     const result = await this.productModel.find().exec();
-    // const products = 
     return result.map((p) => ({ id: p._id, title: p.title, description: p.description, price: p.price }));
   }
 
   async getSingleProduct(productId: string) {
     const product = await this.findProduct(productId);
-    return product;
+    return {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price
+    };
   }
 
-  updateProduct(productId: string, title: string, desc: string, price: number) {
-    // const [product, index] = this.findProduct(productId);
-    // const updatedProduct = { ...product };
-    // if (title) {
-    //   updatedProduct.title = title;
-    // }
-    // if (desc) {
-    //   updatedProduct.description = desc;
-    // }
-    // if (price) {
-    //   updatedProduct.price = price;
-    // }
-    // this.products[index] = updatedProduct;
+  // update product info
+  async updateProduct(productId: string, title: string, desc: string, price: number) {
+    const updatedProduct = await this.findProduct(productId)
+    if (title) {
+      updatedProduct.title = title;
+    }
+    if (desc) {
+      updatedProduct.description = desc;
+    }
+    if (price) {
+      updatedProduct.price = price;
+    }
+    updatedProduct.save();
   }
 
   deleteProduct(prodId: string) {
@@ -66,12 +70,7 @@ export class ProductsService {
       }
     }
 
-    return {
-      id: product._id,
-      title: product.title,
-      description: product.description,
-      price: product.price
-    };
+    return product;
 
   }
 }
