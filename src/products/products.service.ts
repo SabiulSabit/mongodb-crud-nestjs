@@ -53,9 +53,9 @@ export class ProductsService {
     updatedProduct.save();
   }
 
-  deleteProduct(prodId: string) {
-    const index = this.findProduct(prodId)[1];
-    this.products.splice(index, 1);
+  async deleteProduct(prodId: string) {
+    const result = await this.productModel.deleteOne({ _id: prodId }).exec();
+    console.log(result);
   }
 
   // find a single product
