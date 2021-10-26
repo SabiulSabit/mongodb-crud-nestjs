@@ -6,11 +6,11 @@ export const ProductSchema = new mongoose.Schema({
   price: { type: Number, required: true },
 })
 
-export class Product {
-  constructor(
-    public id: string,
-    public title: string,
-    public description: string,
-    public price: number,
-  ) { }
+export interface Product {
+
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+
 }
